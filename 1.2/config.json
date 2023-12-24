@@ -62,4 +62,4 @@
         "no_share": false,
         "app_port": "80",
         "forwarded_port": "8013"
-    }]
+    },]
