@@ -1,6 +1,6 @@
 ---
 - name: Playbook pour créer un fichier
-  hosts: 127.0.0.1
+  hosts: bullseye
   become: true
 
   tasks:

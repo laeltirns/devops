@@ -1,7 +1,7 @@
 #!/usr/bin/env ansible-playbook
 ---
 - name: Configure webserver with Nginx and TLS
-  hosts: bullseye, focal
+  hosts: web 
   become: true
   gather_facts: false
 
