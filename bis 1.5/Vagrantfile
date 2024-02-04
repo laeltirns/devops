@@ -1,0 +1,69 @@
+Vagrant.require_version ">= 2.0.0"
+# Besoin JSON module
+require 'json'
+
+# Lecture JSON file with config details
+f = JSON.parse(File.read(File.join(File.dirname(__FILE__), 'config.json')))
+
+# Definition de la variable PATH_SRC pour le montage
+$PathSrc = ENV['PATH_SRC'] || "."
+Vagrant.configure(2) do |config|
+config.vagrant.plugins = ["vagrant-hostmanager", "vagrant-vbguest"]
+
+# Verification d'une mise à jour sur l'image
+config.vm.box_check_update = true
+
+# Temps d'attente max
+config.vm.boot_timeout = 1200
+
+# désactivation de la mise à jour du plugins guest additions
+if Vagrant.has_plugin?("vagrant-vbguest")
+config.vbguest.auto_update = false
+end
+
+# Activation ssh agent forwarding
+config.ssh.forward_agent = true
+
+# utilisation de la même clé ssh key
+config.ssh.insert_key = false
+
+# manage /etc/hosts
+config.hostmanager.enabled = true
+config.hostmanager.include_offline = true
+config.hostmanager.manage_guest = true
+config.hostmanager.manage_host = true
+
+# Iterer à travers les entrer du fichier JSON
+f.each do |g|
+  config.vm.define g['name'] do |s|
+    s.vm.box = g['box']
+    s.vm.hostname = g['name']
+    s.vm.network 'private_network', ip: g['ip_addr']
+    s.vm.network :forwarded_port,
+      host: g['forwarded_port'],
+      guest: g['app_port']
+
+    # Configuration de partage à no_share à false pour activé le partage de fichier
+    s.vm.synced_folder ".", "/vagrant", disabled: g['no_share']
+    s.vm.provider :virtualbox do |virtualbox|
+      virtualbox.customize ["modifyvm", :id,
+        "--audio", "none",
+        "--cpus", g['cpus'],
+        "--memory", g['memory'],
+        "--graphicscontroller", "VMSVGA",
+        "--vram", "64"
+      ]
+      virtualbox.gui = g['gui']
+      virtualbox.name = g['name']
+    end
+  end
+end
+
+ config.vm.provision "ansible_local" do |ansible|
+  ansible.compatibility_mode = "2.0"
+  ansible.playbook = "playbook.yml"
+  end
+end
+
+
+

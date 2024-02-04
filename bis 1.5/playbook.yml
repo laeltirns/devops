@@ -1,0 +1,17 @@
+---
+- name: Playbook pour créer un fichier
+  hosts: bullseye
+  become: true
+
+  tasks:
+    - name: Créer un répertoire
+      file:
+        path: "~/toto"
+        state: directory
+      become: true
+
+    - name: Créer un fichier
+      file:
+        path: "~/toto/fichier.txt"
+        state: touch
+      become: true

@@ -1,0 +1,8 @@
+Consumer Keys
+API key : IqAWi6RFtBLDJGOWZHula68YG
+API key secret : 2g62axgvf3d3HaSxrmEyAISV32RsEyGxrOSQbkLfRyYjOmhYFE
+
+
+Access Token and Secret 
+Access Token : 1486078163016953862-HeAP0xnWphGa6GPaRo7YlOHyIaNG8O
+Access Token Secret : 6KkjpTwXr90drDp7f7Pmug4jIBNDly9MxeKKlslLNebPe
